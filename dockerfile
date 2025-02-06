@@ -1,18 +1,10 @@
-# Use Node.js as base image
-FROM node:14
+FROM jenkins/jenkins:lts
 
-# Set the working directory
-WORKDIR /usr/src/app
+USER root
 
-# Copy package.json and install dependencies
-COPY package*.json ./
-RUN npm install
+# Install Docker inside Jenkins container
+RUN apt-get update && apt-get install -y \
+    docker.io \
+    && apt-get clean
 
-# Copy the rest of the code
-COPY . .
-
-# Expose the port the app will run on
-EXPOSE 8080
-
-# Run the app
-CMD ["npm", "start"]
+USER jenkins
